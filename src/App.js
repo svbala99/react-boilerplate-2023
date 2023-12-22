@@ -1,23 +1,24 @@
 import React, { useEffect } from "react";
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
-import { triggerIncrementRequest } from "./redux/actions/countAction";
+import {
+  triggerDecrementRequest,
+  triggerIncrementRequest,
+} from "./redux/actions/countAction";
 import { fetchPostsRequest } from "./redux/actions/postAction";
-
 
 const App = () => {
   const dispatch = useDispatch();
-  const makeApiCall = async()=>{
-    try{
+  const makeApiCall = async () => {
+    try {
       dispatch(fetchPostsRequest());
+    } catch (e) {
+      console.error(e);
     }
-    catch(e){
-      console.error(e)
-    }
-  }
-  useEffect(()=>{
+  };
+  useEffect(() => {
     makeApiCall();
-  },[])
+  }, []);
   const countFromRedux = useSelector((state) => state.count);
   const { number, loading } = countFromRedux;
 
@@ -26,7 +27,7 @@ const App = () => {
   };
 
   const handleDecrement = () => {
-    alert("decrement functionality is pending yet");
+    dispatch(triggerDecrementRequest());
   };
 
   return (
@@ -34,7 +35,7 @@ const App = () => {
       <button style={styles.btn} onClick={handleIncrement}>
         +
       </button>
-      {loading ? <h1> ...</h1> : <h1 style={styles.m48}>{number}</h1>}
+      {loading ? <h1> -</h1> : <h1 style={styles.m48}>{number}</h1>}
       <button style={styles.btn} onClick={handleDecrement}>
         -
       </button>
