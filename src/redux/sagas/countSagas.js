@@ -1,6 +1,9 @@
 import { fork, put, takeLatest } from "redux-saga/effects";
 import {
+  DECREMENT_REQUEST,
   INCREMENT_REQUEST,
+  triggerDecrementError,
+  triggerDecrementSuccess,
   triggerIncrementError,
   triggerIncrementSuccess,
 } from "../actions/countAction";
@@ -14,9 +17,18 @@ function* incrementSaga() {
   }
 }
 
+function* decrementSaga() {
+  try {
+    yield put(triggerDecrementSuccess());
+  } catch (e) {
+    yield put(triggerDecrementError(e));
+  }
+}
+
 // watcher saga - MASTER
 function* countWatcherSaga() {
   yield takeLatest(INCREMENT_REQUEST, incrementSaga);
+  yield takeLatest(DECREMENT_REQUEST, decrementSaga);
 }
 
 const countSaga = [fork(countWatcherSaga)];
